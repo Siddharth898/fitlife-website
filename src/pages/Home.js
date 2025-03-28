@@ -14,8 +14,7 @@ const Home = () => {
             </h1>
             <h2 className="hero-subtitle">Strength Training</h2>
             <p className="hero-text">
-              Lorem ipsum dolor sit, bus earum, aliquam ipsa repellat iusto esse laudantium
-              animi vitae consectetur obcaecati.
+            Going to the gym can help you stay fit and healthy. It can also help to reduce stress and improve sleep. Regular exercise can also boost your mood and improve your mental health.
             </p>
             <Link to="/join" className="btn btn-filled hero-btn">
               Sign In

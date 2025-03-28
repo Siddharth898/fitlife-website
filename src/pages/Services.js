@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './Services.css';
 
 const Services = () => {
@@ -6,7 +7,7 @@ const Services = () => {
     {
       id: 1,
       title: 'Physical Fitness',
-      image: 'https://chicago.gopride.com/c/i/38480-115445.jpg',
+      image: 'https://th.bing.com/th/id/OIP.EwbatycHx_915hcNzd7vRgHaE8?rs=1&pid=ImgDetMain',
       description: 'Comprehensive physical fitness programs designed to improve overall health and wellness.'
     },
     {
@@ -18,7 +19,7 @@ const Services = () => {
     {
       id: 3,
       title: 'Strength Training',
-      image: 'https://bodybuilding-wizard.com/wp-content/uploads/2021/06/muscular-endurance-in-strength-training.jpg',
+      image: 'https://content.active.com/Assets/Active.com+Content+Site+Digital+Assets/Triathlon/Galleries/12+Best+Strength+Exercises/18.jpg',
       description: 'Focused strength training regimens to build muscle and increase physical power.'
     },
     {
@@ -36,7 +37,7 @@ const Services = () => {
     {
       id: 6,
       title: 'Cardio Training',
-      image: 'https://coachs-challenges.com/wp-content/uploads/2017/06/fotolia_137560438_m.jpg',
+      image: 'https://images.healthshots.com/healthshots/en/uploads/2023/05/31144842/cardio-workout.jpg',
       description: 'Cardiovascular training to improve heart health and endurance.'
     }
   ];
@@ -50,13 +51,14 @@ const Services = () => {
           </h2>
           <div className="services-grid">
             {services.map(service => (
-              <div className="service-card" key={service.id}>
+              <Link to={`/services/${service.id}`} className="service-card" key={service.id}>
                 <div className="service-image">
                   <img src={service.image || "/placeholder.svg"} alt={service.title} />
                 </div>
                 <h3 className="service-title">{service.title}</h3>
                 <p className="service-description">{service.description}</p>
-              </div>
+                <span className="view-details">View Details <i className="fas fa-arrow-right"></i></span>
+              </Link>
             ))}
           </div>
         </div>
