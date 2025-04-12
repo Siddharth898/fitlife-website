@@ -1,7 +1,11 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { userService } from '../services/api';
 import './Join.css';
 
 const Join = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('signin');
   
   // Form states
@@ -24,9 +28,25 @@ const Join = () => {
   const [signinErrors, setSigninErrors] = useState({});
   const [registerErrors, setRegisterErrors] = useState({});
   
+  // Loading states
+  const [signinLoading, setSigninLoading] = useState(false);
+  const [registerLoading, setRegisterLoading] = useState(false);
+  
   // Success states
   const [signinSuccess, setSigninSuccess] = useState(false);
   const [registerSuccess, setRegisterSuccess] = useState(false);
+  
+  // API error states
+  const [signinApiError, setSigninApiError] = useState('');
+  const [registerApiError, setRegisterApiError] = useState('');
+  
+  // Check if user is already logged in
+  useEffect(() => {
+    const userInfo = localStorage.getItem('userInfo');
+    if (userInfo) {
+      navigate('/');
+    }
+  }, [navigate]);
   
   // Handle signin form changes
   const handleSigninChange = (e) => {
@@ -107,41 +127,81 @@ const Join = () => {
   };
   
   // Handle signin form submission
-  const handleSigninSubmit = (e) => {
+  const handleSigninSubmit = async (e) => {
     e.preventDefault();
     
     const errors = validateSigninForm();
     setSigninErrors(errors);
     
     if (Object.keys(errors).length === 0) {
-      // In a real app, you would handle authentication here
-      console.log('Signin form submitted:', signinForm);
-      setSigninSuccess(true);
+      setSigninLoading(true);
+      setSigninApiError('');
       
-      // Reset form after successful submission
-      setTimeout(() => {
-        setSigninSuccess(false);
-      }, 3000);
+      try {
+        await userService.login(signinForm.email, signinForm.password);
+        setSigninSuccess(true);
+        
+        // Redirect to home page after successful login
+        setTimeout(() => {
+          navigate('/');
+        }, 1500);
+      } catch (error) {
+        setSigninApiError(
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : 'An error occurred. Please try again.'
+        );
+      } finally {
+        setSigninLoading(false);
+      }
     }
   };
   
   // Handle register form submission
-  const handleRegisterSubmit = (e) => {
+  const handleRegisterSubmit = async (e) => {
     e.preventDefault();
     
     const errors = validateRegisterForm();
     setRegisterErrors(errors);
     
     if (Object.keys(errors).length === 0) {
-      // In a real app, you would handle registration here
-      console.log('Register form submitted:', registerForm);
-      setRegisterSuccess(true);
+      setRegisterLoading(true);
+      setRegisterApiError('');
       
-      // Reset form after successful submission
-      setTimeout(() => {
-        setRegisterSuccess(false);
-        setActiveTab('signin');
-      }, 3000);
+      try {
+        const userData = {
+          fullName: registerForm.fullName,
+          email: registerForm.email,
+          phone: registerForm.phone,
+          password: registerForm.password,
+          fitnessGoal: registerForm.fitnessGoal
+        };
+        
+        await userService.register(userData);
+        setRegisterSuccess(true);
+        
+        // Switch to signin tab after successful registration
+        setTimeout(() => {
+          setActiveTab('signin');
+          setRegisterForm({
+            fullName: '',
+            email: '',
+            phone: '',
+            password: '',
+            confirmPassword: '',
+            fitnessGoal: '',
+            agreeTerms: false
+          });
+        }, 1500);
+      } catch (error) {
+        setRegisterApiError(
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : 'An error occurred. Please try again.'
+        );
+      } finally {
+        setRegisterLoading(false);
+      }
     }
   };
   
@@ -149,7 +209,7 @@ const Join = () => {
     <main>
       <section className="join section">
         <div className="container">
-          <h2 className="section-title">Join <span>Royal Fitness</span></h2>
+          <h2 className="section-title">Join <span>Fit Life</span></h2>
           
           <div className="form-container">
             <div className="form-tabs">
@@ -172,7 +232,14 @@ const Join = () => {
                 {signinSuccess && (
                   <div className="success-message">
                     <i className="fas fa-check-circle"></i>
-                    Successfully signed in!
+                    Successfully signed in! Redirecting...
+                  </div>
+                )}
+                
+                {signinApiError && (
+                  <div className="error-alert">
+                    <i className="fas fa-exclamation-circle"></i>
+                    {signinApiError}
                   </div>
                 )}
                 
@@ -204,7 +271,13 @@ const Join = () => {
                   </div>
                   
                   <div className="form-group">
-                    <button type="submit" className="btn btn-filled form-btn">Sign In</button>
+                    <button 
+                      type="submit" 
+                      className="btn btn-filled form-btn"
+                      disabled={signinLoading}
+                    >
+                      {signinLoading ? 'Signing In...' : 'Sign In'}
+                    </button>
                   </div>
                   
                   <div className="form-footer">
@@ -218,6 +291,13 @@ const Join = () => {
                   <div className="success-message">
                     <i className="fas fa-check-circle"></i>
                     Registration successful! You can now sign in.
+                  </div>
+                )}
+                
+                {registerApiError && (
+                  <div className="error-alert">
+                    <i className="fas fa-exclamation-circle"></i>
+                    {registerApiError}
                   </div>
                 )}
                 
@@ -321,7 +401,13 @@ const Join = () => {
                   </div>
                   
                   <div className="form-group">
-                    <button type="submit" className="btn btn-filled form-btn">Register</button>
+                    <button 
+                      type="submit" 
+                      className="btn btn-filled form-btn"
+                      disabled={registerLoading}
+                    >
+                      {registerLoading ? 'Registering...' : 'Register'}
+                    </button>
                   </div>
                   
                   <div className="form-footer">

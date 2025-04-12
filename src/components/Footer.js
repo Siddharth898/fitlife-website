@@ -16,7 +16,7 @@ const Footer = () => {
             <i className="fab fa-linkedin-in"></i>
           </a>
         </div>
-        <p className="copyright">© Royal Fitness 2024 - All Rights Reserved</p>
+        <p className="copyright">© Fit Life 2024 - All Rights Reserved</p>
       </div>
     </footer>
   );

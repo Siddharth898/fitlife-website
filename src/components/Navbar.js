@@ -1,8 +1,16 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { UserContext } from '../context/UserContext';
 import './Navbar.css';
 
 const Navbar = () => {
+  const { userInfo, logout } = useContext(UserContext);
+
+  const handleLogout = () => {
+    logout();
+    window.location.href = '/';
+  };
+
   return (
     <header className="navbar">
       <div className="container navbar-container">
@@ -16,7 +24,14 @@ const Navbar = () => {
           <Link to="/pricing" className="nav-link">Pricing</Link>
           <Link to="/review" className="nav-link">Review</Link>
         </nav>
-        <Link to="/join" className="btn join-btn">Sign In</Link>
+        {userInfo ? (
+          <div className="user-menu">
+            <span className="user-name">Hi, {userInfo.fullName.split(' ')[0]}</span>
+            <button onClick={handleLogout} className="btn logout-btn">Logout</button>
+          </div>
+        ) : (
+          <Link to="/join" className="btn join-btn">Join Us</Link>
+        )}
       </div>
     </header>
   );

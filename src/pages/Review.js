@@ -8,21 +8,21 @@ const Review = () => {
       name: 'John',
       rating: 5,
       image: '',
-      text: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eius reiciendis consequatur officia recusandae porro at?'
+      text: 'I absolutely love how easy it is to navigate this site. I can quickly find reviews for any product Im interested in, and the search bar is super helpful'
     },
     {
       id: 2,
       name: 'Steve',
       rating: 4,
       image: '',
-      text: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eius reiciendis consequatur officia recusandae porro at?'
+      text: 'LThe reviews are incredibly detailed and cover all the aspects I need to know about. I love how each review breaks down the pros and cons, and I can tell the reviewers are being honest'
     },
     {
       id: 3,
       name: 'David',
       rating: 5,
       image: '',
-      text: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eius reiciendis consequatur officia recusandae porro at?'
+      text: 'The reviews are incredibly detailed and cover all the aspects I need to know about. I love how each review breaks down the pros and cons, and I can tell the reviewers are being honest'
     }
   ];
 
